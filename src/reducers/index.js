@@ -1,8 +1,33 @@
+import { FETCH_SMURF, FETCH_SUCCESS, FETCH_FAILED_SMURF, ADD_SMURF, SMURF_ERROR } from '../actions/index'
+
 
 export const initialState = {
+    smurfs: [],
+    isFetching: false,
+    error: ''
 }
 
-const reducer = ()=>{
+export const reducer = (state = initialState, action)=>{
+    switch(action.type) {
+        case(FETCH_SMURF):
+            return({ ...state, isFetching: true,
+            })
+        case(FETCH_SUCCESS):
+            return({   ...state, smurfs: action.payload, isFetching: false,
+            })
+        case(FETCH_FAILED_SMURF):
+            return({...state,error: action.payload, isFetching: false
+            })
+        case(ADD_SMURF):
+            return({
+                ...state,smurfs: [...state.smurfs, {...action.payload,isFetching: true, id: Date.now()}] // I've tried to add an isFetching here to get a loading status for each new entry.  
+            })
+        case(SMURF_ERROR):
+            return({  ...state,  error: action.payload
+            })
+        default:
+            return state;
+    }
 }
 
 export default reducer;
